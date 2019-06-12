@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_secure_password
 
   before_save { email.downcase! }
 
@@ -16,6 +17,26 @@ class User < ApplicationRecord
     new_record? || password.presence
   end
 
-  has_secure_password
+  def jwt_payload
+    {
+      user: {
+        id: id,
+        name: name,
+      }
+    }
+  end
+
+  def jwt_secret
+    if Rails.env.production?
+      Rails.application.credentials.secret_key_base
+    else
+      'secret'
+    end
+  end
+
+  def jwt_token
+    JWT.encode jwt_payload, jwt_secret, 'HS256'
+  end
+
 
 end
