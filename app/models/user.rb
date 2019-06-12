@@ -10,6 +10,12 @@ class User < ApplicationRecord
                     format: { with: VALID_EMAIL_REGEXP },
                     uniqueness: { case_sensitive: false }
 
-  validates :password, presence: true, length: { minimum: 6 }, :on => :create
+  validates :password, presence: true, length: { minimum: 6 }, if: :check_password
+
+  def check_password
+    new_record? || password.presence
+  end
+
   has_secure_password
+
 end

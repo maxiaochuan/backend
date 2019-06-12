@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  resources :users
+
+  scope '/api' do
+    resources :users
+  end
   post "/graphql", to: "graphql#execute"
 
   if Rails.env.development?
