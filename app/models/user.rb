@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id              :integer          not null, primary key
+#  name            :string           not null
+#  email           :string           not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  password_digest :string           not null
+#  phone           :string
+#
+
 class User < ApplicationRecord
   has_secure_password
 
@@ -10,10 +23,16 @@ class User < ApplicationRecord
   validates :email, presence: true, length: { maximum: 255 },
                     format: { with: VALID_EMAIL_REGEXP },
                     uniqueness: { case_sensitive: false }
+  validates :phone, presence: true, numericality: true, length: { is: 11 },
+                    uniqueness: { case_sensitive: false }, if: :phone_exist
 
-  validates :password, presence: true, length: { minimum: 6 }, if: :check_password
+  validates :password, presence: true, length: { minimum: 6 }, if: :new_record_and_password_presence
 
-  def check_password
+  def phone_exist
+    phone.presence
+  end
+
+  def new_record_and_password_presence
     new_record? || password.presence
   end
 
