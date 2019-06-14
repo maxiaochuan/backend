@@ -4,11 +4,30 @@ class MainController < ApplicationController
   def login
     p = params.require(:user).permit(:email, :phone, :password)
 
-    @current_user ||= User.find_by email: p[:email]
-    @current_user ||= User.find_by phone: p[:phone]
+    @current_user ||= User.find_by_email p[:email]
+    @current_user ||= User.find_by_phone p[:phone]
 
-    puts @current_user.to_s
+    if @current_user
+      if  @current_user.authenticate(p[:password])
+        give_token
+      else
+        message = 'password not match'
+        render json: {
+          message: message,
+        }, status: :unauthorized
+      end
+    else
+      message = 'user doesn\'t exist'
+      render json: {
+        message: message,
+      }, status: :unauthorized
+    end
+  end
 
-    render json: @current_user
+  def give_token
+    headers['Authorization'] = "Bearer #{@current_user.jwt_token}"
+    render json: {
+      Authorization: headers['Authorization'],
+    }
   end
 end

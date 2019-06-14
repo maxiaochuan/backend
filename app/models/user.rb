@@ -38,19 +38,20 @@ class User < ApplicationRecord
 
   def jwt_payload
     {
+      iss: 'mxcins@gmail.com',
+      exp: 1.hours.from_now.to_i,
+      iat: DateTime.now.to_i,
       user: {
         id: id,
         name: name,
+        email: email,
+        phone: phone,
       }
     }
   end
 
   def jwt_secret
-    if Rails.env.production?
-      Rails.application.credentials.secret_key_base
-    else
-      'secret'
-    end
+    Rails.application.credentials.secret_key_base
   end
 
   def jwt_token
