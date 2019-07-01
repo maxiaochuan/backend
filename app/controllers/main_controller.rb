@@ -9,7 +9,10 @@ class MainController < ApplicationController
 
     if @current_user
       if  @current_user.authenticate(p[:password])
-        give_token
+        headers['Authorization'] = "Bearer #{@current_user.jwt_token}"
+        render json: {
+          Authorization: headers['Authorization'],
+        }
       else
         message = 'password not match'
         render json: {
@@ -22,12 +25,5 @@ class MainController < ApplicationController
         message: message,
       }, status: :unauthorized
     end
-  end
-
-  def give_token
-    headers['Authorization'] = "Bearer #{@current_user.jwt_token}"
-    render json: {
-      Authorization: headers['Authorization'],
-    }
   end
 end
