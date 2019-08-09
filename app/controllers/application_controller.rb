@@ -1,12 +1,15 @@
 class ApplicationController < ActionController::API
+  include ::ActionController::Cookies
 
   attr_accessor :current_user
 
   before_action :authenticate_user!
 
   def authenticate_user!
-    header = request.headers['Authorization'].presence
-    token = header.split(' ').last if header
+    auth ||= request.headers['Authorization'].presence
+    auth ||= cookies[:Authorization]
+
+    token = auth.split(' ').last if auth
 
     payload = JWT.decode token, Rails.application.credentials.secret_key_base, true, { algorithm: 'HS256' } if token
 

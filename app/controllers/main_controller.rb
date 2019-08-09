@@ -9,20 +9,20 @@ class MainController < ApplicationController
 
     if @current_user
       if  @current_user.authenticate(p[:password])
-        headers['Authorization'] = "Bearer #{@current_user.jwt_token}"
+        auth = headers['Authorization'] = cookies[:Authorization] = "Bearer #{@current_user.jwt_token}"
         render json: {
-          Authorization: headers['Authorization'],
+          Authorization: auth,
         }
       else
         message = 'password not match'
         render json: {
-          message: message,
+          password: [message],
         }, status: :unauthorized
       end
     else
       message = 'user doesn\'t exist'
       render json: {
-        message: message,
+        name: message,
       }, status: :unauthorized
     end
   end
