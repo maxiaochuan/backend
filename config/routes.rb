@@ -1,15 +1,14 @@
 Rails.application.routes.draw do
 
   scope '/api' do
-
     post '/login' => 'main#login'
-
+    post '/check' => 'main#check'
 
     resources :users
-    post "/graphql", to: "graphql#execute"
 
+    post '/graphql', to: 'graphql#execute'
     if Rails.env.development?
-      mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
+      mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/graphql'
     end
   end
 

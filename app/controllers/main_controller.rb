@@ -1,5 +1,8 @@
 class MainController < ApplicationController
-  skip_before_action :authenticate_user!
+  skip_before_action :authenticate_user!, only: [:login]
+
+  def check
+  end
 
   def login
     p = params.require(:user).permit(:email, :phone, :password)
