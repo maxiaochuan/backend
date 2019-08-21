@@ -15,7 +15,7 @@ class ApplicationController < ActionController::API
 
     if payload
       @current_user ||= User.find_by_email payload[0]['user']['email']
-      headers['Authorization'] = "Bearer #{@current_user.jwt_token}"
+      # headers['Authorization'] = "Bearer #{@current_user.jwt_token}"
     end
 
     raise JWT::VerificationError unless @current_user
