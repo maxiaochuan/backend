@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   scope '/api' do
     post '/login' => 'main#login'
     post '/check' => 'main#check'
+    post '/authenticate' => 'main#authenticate'
 
     resources :users
 

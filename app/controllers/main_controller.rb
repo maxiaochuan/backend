@@ -4,6 +4,12 @@ class MainController < ApplicationController
   def check
   end
 
+  def authenticate
+    if @current_user
+      render json: @current_user
+    end
+  end
+
   def login
     p = params.require(:user).permit(:email, :phone, :password)
 
