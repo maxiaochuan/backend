@@ -1,13 +1,18 @@
 class MainController < ApplicationController
   skip_before_action :authenticate_user!, only: [:login]
 
-  def check
+  def authenticate
+    render json: {
+      Authorization: set_authorization,
+    }
   end
 
-  def authenticate
-    if @current_user
-      render json: @current_user
-    end
+  def set_authorization
+    authorization = "Bearer #{@current_user.jwt_token}";
+    headers['Authorization'] = authorization
+    cookies[:Authorization] = authorization
+
+    authorization
   end
 
   def login
@@ -18,9 +23,8 @@ class MainController < ApplicationController
 
     if @current_user
       if  @current_user.authenticate(p[:password])
-        auth = headers['Authorization'] = cookies[:Authorization] = "Bearer #{@current_user.jwt_token}"
         render json: {
-          Authorization: auth,
+          Authorization: set_authorization,
         }
       else
         message = 'password not match'

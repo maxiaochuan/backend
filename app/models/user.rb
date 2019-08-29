@@ -40,7 +40,7 @@ class User < ApplicationRecord
   def jwt_payload
     {
       iss: 'mxcins@gmail.com',
-      exp: 1.hours.from_now.to_i,
+      exp: 24.hours.from_now.to_i,
       iat: DateTime.now.to_i,
       user: {
         id: id,
