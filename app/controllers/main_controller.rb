@@ -3,7 +3,8 @@ class MainController < ApplicationController
 
   def authenticate
     render json: {
-      Authorization: set_authorization,
+      name: @current_user.name,
+      phone: @current_user.phone,
     }
   end
 
