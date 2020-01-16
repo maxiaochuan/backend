@@ -5,6 +5,7 @@ class MainController < ApplicationController
     render json: {
       name: @current_user.name,
       phone: @current_user.phone,
+      id: @current_user.id,
     }
   end
 
